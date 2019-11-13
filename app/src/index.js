@@ -21,6 +21,13 @@ const App = {
       // get accounts
       const accounts = await web3.eth.getAccounts();
       this.account = accounts[0];
+
+      // set name and symbol
+      const { name, symbol } = this.meta.methods;
+      const tokenName = await name().call();
+      document.getElementById("tokenName").innerHTML = tokenName;
+      const tokenSymbol = await symbol().call();
+      document.getElementById("tokenSymbol").innerHTML = tokenSymbol;
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
@@ -41,7 +48,10 @@ const App = {
 
   // Implement Task 4 Modify the front end of the DAPP
   lookUp: async function (){
-    
+    const { lookUptokenIdToStarInfo } = this.meta.methods;
+    const id = document.getElementById("lookId").value;
+    const name = await lookUptokenIdToStarInfo(id).call();
+    App.setStatus(`Star ${id} is ${name}`);
   }
 
 };
